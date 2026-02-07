@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "E-ink driver for GDEY0154D67 using esp_lcd component"
+license: "GPL-3.0-or-later"
+maintainers:
+  - "Jakub Kral <jakub6kral@centrum.cz>"
+
+repository: "https://github.com/kk-kk-k/gdey0154D67.git"
+
+dependencies:
+  idf: ">=5.0"
