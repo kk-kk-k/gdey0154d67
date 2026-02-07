@@ -1,0 +1,17 @@
+dependencies:
+  gdey0154d67:
+    dependencies: []
+    source:
+      path: /home/kk/Projects/embeded/esp/TinyTicker/SW/gdey0154d67/gdey0154d67
+      type: local
+    version: '*'
+  idf:
+    source:
+      type: idf
+    version: 5.5.2
+direct_dependencies:
+- gdey0154d67
+- idf
+manifest_hash: 6487addac2d895aea2f4863c2f7e42c710abfc528eafcddb7630b1bf955f0b7a
+target: esp32s3
+version: 2.0.0

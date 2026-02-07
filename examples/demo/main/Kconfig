@@ -1,0 +1,33 @@
+menu "GDEY0154D67 Basic example configuration"
+
+menu "GDEY0154D67 pinout"
+
+config EINK_BUSY
+    int "Busy pin"
+
+config EINK_RES
+    int "Reset pin"
+    help
+        RES on the board
+
+config EINK_DC
+    int "Data/Command pin"
+
+config EINK_CS
+    int "SPI CS pin"
+
+config EINK_SPI_SCK
+    int "SPI clock pin"
+    help
+        SCK on board.
+        Refer to the ESP32-xx datasheet, where SPI2/3 pinout is defined.
+
+config EINK_SPI_MOSI
+    int "SPI MOSI pin"
+    help
+        SDI on board.
+        Refer to the ESP32-xx datasheet, where SPI2/3 pinout is defined.
+
+endmenu
+
+endmenu

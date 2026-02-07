@@ -1,0 +1,15 @@
+# Disable assert evaluations when -NDEBUG is set
+CONFIG_COMPILER_ASSERT_NDEBUG_EVALUATE=n
+
+# Increase stack smashing protection
+CONFIG_COMPILER_STACK_CHECK_MODE_ALL=y
+
+# Enable the compiler static analyzer
+CONFIG_COMPILER_STATIC_ANALYZER=y
+
+# Halt on panic
+CONFIG_ESP_SYSTEM_PANIC_PRINT_HALT=y
+
+# Disable RTC
+CONFIG_ESP_INT_WDT=n
+CONFIG_ESP_TASK_WDT_EN=n
