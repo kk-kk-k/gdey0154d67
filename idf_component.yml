@@ -1,3 +1,5 @@
+name: "gdey0154d67"
+namespace: "jakub6kral"
 version: "0.1.0"
 description: "E-ink driver for GDEY0154D67 using esp_lcd component"
 license: "GPL-3.0-or-later"
