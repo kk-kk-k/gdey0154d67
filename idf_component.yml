@@ -6,7 +6,7 @@ license: "GPL-3.0-or-later"
 maintainers:
   - "Jakub Kral <jakub6kral@centrum.cz>"
 
-repository: "https://github.com/kk-kk-k/gdey0154D67.git"
+repository: "https://github.com/kk-kk-k/gdey0154d67.git"
 
 dependencies:
   idf: ">=5.0"
