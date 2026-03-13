@@ -33,8 +33,8 @@
 // Public API implementation
 //------------------
 
-esp_err_t esp_lcd_new_panel_gdey0154d67(const esp_lcd_panel_io_handle_t io,
-        const esp_lcd_panel_dev_config_t * const panel_dev_config, esp_lcd_panel_handle_t * const ret_panel) {
+esp_err_t esp_lcd_new_panel_gdey0154d67(const esp_lcd_panel_io_handle_t io, const esp_lcd_panel_dev_config_t * const panel_dev_config,
+    esp_lcd_panel_handle_t * const ret_panel) {
     ESP_RETURN_ON_FALSE(io != NULL, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: io cannot be NULL", __FILE__, __FUNCTION__, __LINE__);
     ESP_RETURN_ON_FALSE(panel_dev_config != NULL, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: panel_dev_config cannot be NULL", __FILE__, __FUNCTION__, __LINE__);
     ESP_RETURN_ON_FALSE(ret_panel != NULL, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: ret_panel cannot be NULL", __FILE__, __FUNCTION__, __LINE__);
@@ -348,71 +348,6 @@ static esp_err_t gdey0154d67_draw_bitmap(esp_lcd_panel_t *_self, int x_start, in
 
     return ESP_OK;
 }
-
-/*
-static esp_err_t gdey0154d67_draw_bitmap(esp_lcd_panel_t *_self, int x_start, int y_start, int x_end, int y_end, const void *color_data) {
-    ESP_RETURN_ON_FALSE(_self != NULL, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: Invalid self arg", __FILE__, __FUNCTION__, __LINE__);
-    ESP_RETURN_ON_FALSE(x_start >= 0, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: x_start must be >= 0", __FILE__, __FUNCTION__, __LINE__);
-    ESP_RETURN_ON_FALSE(y_start >= 0, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: y_start must be >= 0", __FILE__, __FUNCTION__, __LINE__);
-    ESP_RETURN_ON_FALSE(x_end <= GDEY0154D67_H_RES, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: x_end must be <= %d", __FILE__, __FUNCTION__, __LINE__, GDEY0154D67_H_RES);
-    ESP_RETURN_ON_FALSE(y_end <= GDEY0154D67_V_RES, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: y_end must be <= %d", __FILE__, __FUNCTION__, __LINE__, GDEY0154D67_V_RES);
-    ESP_RETURN_ON_FALSE(x_end > x_start, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: x_end must be > x_start", __FILE__, __FUNCTION__, __LINE__);
-    ESP_RETURN_ON_FALSE(y_end > y_start, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: y_end must be > y_start", __FILE__, __FUNCTION__, __LINE__);
-    ESP_RETURN_ON_FALSE((x_start & 0b111) == 0, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: x_start must be dividable by 8", __FILE__, __FUNCTION__, __LINE__);
-    ESP_RETURN_ON_FALSE((x_end & 0b111) == 0, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: x_end must be dividable by 8", __FILE__, __FUNCTION__, __LINE__);
-    ESP_RETURN_ON_FALSE(color_data != NULL, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: Invalid color_data arg", __FILE__, __FUNCTION__, __LINE__);
-
-    // Get the underlying display structure
-    const gdey0154d67_display_t * const self = gdey0154d67_extract_display(_self);
-    ESP_RETURN_ON_FALSE(self != NULL, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: Invalid self arg (couldn't extract gdey0154d67_display_t)", __FILE__, __FUNCTION__, __LINE__);
-
-    x_start /= 8;
-    x_end /= 8;
-    uint32_t size = (y_end - y_start) * (x_end - x_start);
-
-    ESP_RETURN_ON_ERROR(gpio_set_level(self->reset_pin, 0), gdey0154d67_tag, "%s:%s:%d: Cannot set reset pin low", __FILE__, __FUNCTION__, __LINE__);
-    vTaskDelay(pdMS_TO_TICKS(10));
-    ESP_RETURN_ON_ERROR(gpio_set_level(self->reset_pin, 1), gdey0154d67_tag, "%s:%s:%d: Cannot set reset pin high", __FILE__, __FUNCTION__, __LINE__);
-	vTaskDelay(pdMS_TO_TICKS(10));
-
-    // Setup RAM address range. This allows drawing pictures over part of the screen without any extra computing.
-    ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_RAM_X_RANGE_SETUP, (uint8_t[]) {x_start, x_end - 1}, 2), gdey0154d67_tag, "%s:%s:%d: Cannot send RAM x range setup command", __FILE__, __FUNCTION__, __LINE__);
-    ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_RAM_Y_RANGE_SETUP, (uint8_t[]) {y_start, 0, y_end - 1, 0}, 4), gdey0154d67_tag, "%s:%s:%d: Cannot send RAM y range setup command", __FILE__, __FUNCTION__, __LINE__);
-
-    // Setup RAM address
-    ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_SET_RAM_X_ADDR, (uint8_t[]) {x_start}, 1), gdey0154d67_tag, "%s:%s:%d: Cannot send x setup command", __FILE__, __FUNCTION__, __LINE__);
-    ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_SET_RAM_Y_ADDR, (uint8_t[]) {y_start, 0}, 2), gdey0154d67_tag, "%s:%s:%d: Cannot send y setup command", __FILE__, __FUNCTION__, __LINE__);
-
-    // Send the picture
-    ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_color(self->io, GDEY0154D67_CMD_WRITE_BW_RAM, color_data, size), gdey0154d67_tag, "%s:%s:%d: Cannot send write BW RAM command", __FILE__, __FUNCTION__, __LINE__);
-
-    if (self->update_mode == esp_lcd_gdey0154d67_partial_update) {
-        esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_BORDER_CTRL, (uint8_t[]) {0b11000000}, 1);
-    } else {
-        ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_SET_RAM_X_ADDR, (uint8_t[]) {x_start}, 1), gdey0154d67_tag, "%s:%s:%d: Cannot send x setup command", __FILE__, __FUNCTION__, __LINE__);
-        ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_SET_RAM_Y_ADDR, (uint8_t[]) {y_start, 0}, 2), gdey0154d67_tag, "%s:%s:%d: Cannot send y setup command", __FILE__, __FUNCTION__, __LINE__);
-        ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_color(self->io, GDEY0154D67_CMD_WRITE_RED_RAM, color_data, size), gdey0154d67_tag, "%s:%s:%d: Cannot send write BW RAM command", __FILE__, __FUNCTION__, __LINE__);
-        esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_BORDER_CTRL, (uint8_t[]) {0x05}, 1);
-    }
-
-    if (self->update_mode == esp_lcd_gdey0154d67_fast_update) {
-        // Set manual temperature
-        ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_TEMP_REG_WRITE, (uint8_t[]) {0x64, 0x00}, 2), gdey0154d67_tag, "%s:%s:%d: Cannot send write temp register", __FILE__, __FUNCTION__, __LINE__);
-        
-        // Load LUT
-        ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_DISP_UPDATE_CTRL_2, (uint8_t[]) {0x91}, 1), gdey0154d67_tag, "%s:%s:%d: Cannot send display update control command", __FILE__, __FUNCTION__, __LINE__);
-        ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_MASTER_ACTIVATION, NULL, 0), gdey0154d67_tag, "%s:%s:%d: Cannot send master activation command", __FILE__, __FUNCTION__, __LINE__);
-        ESP_RETURN_ON_ERROR(esp_lcd_gdey0154d67_await_busy(_self), gdey0154d67_tag, "%s:%s:%d: Cannot await busy", __FILE__, __FUNCTION__, __LINE__);
-    }
-    
-    ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_DISP_UPDATE_CTRL_2, &self->update_mode, 1), gdey0154d67_tag, "%s:%s:%d: Cannot send update control 2 command", __FILE__, __FUNCTION__, __LINE__);
-
-    ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(self->io, GDEY0154D67_CMD_MASTER_ACTIVATION, NULL, 0), gdey0154d67_tag, "%s:%s:%d: Cannot send master activation command", __FILE__, __FUNCTION__, __LINE__);
-    ESP_RETURN_ON_ERROR(esp_lcd_gdey0154d67_await_busy(_self), gdey0154d67_tag, "Cannot wait for busy");
-
-    return ESP_OK;
-}
-*/
 
 static esp_err_t gdey0154d67_invert_color(esp_lcd_panel_t *_self, bool invert_color_data) {
     ESP_RETURN_ON_FALSE(_self != NULL, ESP_ERR_INVALID_ARG, gdey0154d67_tag, "%s:%s:%d: Invalid self arg", __FILE__, __FUNCTION__, __LINE__);
