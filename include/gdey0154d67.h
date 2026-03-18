@@ -28,6 +28,12 @@
 #include "esp_err.h"                // esp_err_t
 #include "driver/gpio.h"            // gpio_num_t
 
+
+// Display dimensions
+#define ESP_LCD_GDEY0154D67_H_RES 200                  // Display width
+#define ESP_LCD_GDEY0154D67_V_RES 200                  // Display height
+#define ESP_LCD_GDEY0154D67_BUF_SIZE (ESP_LCD_GDEY0154D67_H_RES * ESP_LCD_GDEY0154D67_V_RES / 8)    // Display buffer length [5 000 bytes]
+
 /**
  * @brief GDEY0154D67 vendor-specific device configuration.
  * @note Enabling retain_ram increases power consumption a little (~ 3 uA).

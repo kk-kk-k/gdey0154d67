@@ -135,24 +135,25 @@ void app_main(void) {
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_full_update));
     ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_full_screen_specs));
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
-    vTaskDelay(pdMS_TO_TICKS(5000));
+    vTaskDelay(pdMS_TO_TICKS(2000));
 
     // Draw some images using partial update mode
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false));
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_partial_update));
-    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 128, 128, demo_image_128x128));
-    vTaskDelay(pdMS_TO_TICKS(500));
-    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 40, 40, 168, 168, demo_image_128x128));
-    vTaskDelay(pdMS_TO_TICKS(500));
-    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 40, 40, 200, 200, demo_image_160x160));
-    vTaskDelay(pdMS_TO_TICKS(500));
-    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 160, 160, demo_image_160x160));
-    vTaskDelay(pdMS_TO_TICKS(500));
+    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_full_screen));
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
+    vTaskDelay(pdMS_TO_TICKS(2000));
+
+    ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false));
+    ESP_ERROR_CHECK(esp_lcd_gdey0154d67_whitescreen(eink));
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_partial_update));
+    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_full_screen_specs));
+    ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
+    vTaskDelay(pdMS_TO_TICKS(2000));
 
     // Clear the E-ink screen using full update mode
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false));
-    ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_full_update));
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_whitescreen(eink));
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
 

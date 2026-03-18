@@ -50,11 +50,6 @@
  */
 static const char * const gdey0154d67_tag = "GDEY0154D67_driver";
 
-
-// Display dimensions
-#define GDEY0154D67_H_RES 200                  // Display width
-#define GDEY0154D67_V_RES 200                  // Display height
-
 // ---------------------
 // Panel command codes
 // ---------------------
