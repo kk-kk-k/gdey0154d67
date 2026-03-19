@@ -73,18 +73,18 @@ extern esp_err_t esp_lcd_new_panel_gdey0154d67(const esp_lcd_panel_io_handle_t i
  *  The update type determines the update duration.
  *  The new update type is used when new image is sent to the display.
  * 
- * @param[in] self GDEY0154D67 device handle.
+ * @param[in] epd GDEY0154D67 device handle.
  * @param[in] update_mode Update type (full, fast, partial).
  * @return esp_err_t Error code.
  */
-extern esp_err_t esp_lcd_gdey0154d67_set_update_mode(esp_lcd_panel_handle_t self, const esp_lcd_gdey0154d67_update_mode_t update_mode);
+extern esp_err_t esp_lcd_gdey0154d67_set_update_mode(esp_lcd_panel_handle_t epd, const esp_lcd_gdey0154d67_update_mode_t update_mode);
 
 /**
  * @brief Clear whole GDEY0154D67 screen.
  *  Recommended when the e-ink is not used for longer period of time.
  *  This function does not change the e-ink update type.
  * 
- * @param[in] self GDEY0154D67 device handle.
+ * @param[in] epd GDEY0154D67 device handle.
  * @return esp_err_t Error code
  */
-extern esp_err_t esp_lcd_gdey0154d67_whitescreen(esp_lcd_panel_handle_t self);
+extern esp_err_t esp_lcd_gdey0154d67_whitescreen(esp_lcd_panel_handle_t epd);

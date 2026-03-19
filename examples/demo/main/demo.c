@@ -34,7 +34,7 @@
 #include "gdey0154d67.h"        // esp_lcd_gdey0154d67_set_update_mode(), esp_lcd_gdey0154d67_whitescreen()
 #include "driver/gpio.h"        // gpio_num_t
 #include "sdkconfig.h"          // CONFIG_EINK_BUSY, CONFIG_EINK_CS, CONFIG_EINK_DC, CONFIG_EINK_RES, CONFIG_EINK_SPI_MOSI...
-#include "images.h"             // demo_image_128x128, demo_image_160x160, demo_image_full_screen, demo_image_full_screen_specs
+#include "example_images.h"     // demo_image_...
 #include <assert.h>             // assert()
 
 /**
@@ -126,36 +126,32 @@ void app_main(void) {
 
     // Draw full screen image with basic info using fast update mode
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_fast_update));
-    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_full_screen));
+    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_basic));
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
     vTaskDelay(pdMS_TO_TICKS(2000));
 
     // Draw full screen image with technical details using full update mode
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false));
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_full_update));
-    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_full_screen_specs));
-    ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
-    vTaskDelay(pdMS_TO_TICKS(2000));
-
-    // Draw some images using partial update mode
-    ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false));
-    ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_partial_update));
-    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_full_screen));
+    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_specs));
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
     vTaskDelay(pdMS_TO_TICKS(2000));
 
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false));
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_whitescreen(eink));
+    ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_partial_update));
+    for (int i = 0; i < sizeof(demo_images_numbers) / sizeof(*demo_images_numbers); i++) {
+        ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_images_numbers[i]));
+        vTaskDelay(pdMS_TO_TICKS(500));
+    }
+    ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
     vTaskDelay(pdMS_TO_TICKS(1000));
-    ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_partial_update));
-    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_full_screen_specs));
-    ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
-    vTaskDelay(pdMS_TO_TICKS(2000));
 
-    // Clear the E-ink screen using full update mode
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false));
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_whitescreen(eink));
+    ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_qr_code_link_to_gh));
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
+    vTaskDelay(pdMS_TO_TICKS(2000));
 
     // Release the E-ink handle
     ESP_ERROR_CHECK(esp_lcd_panel_del(eink));
