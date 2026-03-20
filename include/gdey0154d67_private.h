@@ -115,6 +115,15 @@ static inline gdey0154d67_display_t * gdey0154d67_extract_display(esp_lcd_panel_
 }
 
 /**
+ * @brief Load LUT to the display
+ * 
+ * @param[in] epd GDEY0154D67 device handle.
+ * @param[in] lut Newly loaded LUT.
+ * @return esp_err_t Error code.
+ */
+static esp_err_t gdey0154d67_load_lut(esp_lcd_panel_t *epd, const uint8_t * const lut);
+
+/**
  * @brief Busy ISR callback function.
  *   This ISR only signals that the display became ready.
  * @note This function gives the semaphore
@@ -129,7 +138,7 @@ static IRAM_ATTR void gdey0154d67_busy_isr(void * epd);
  * @note The display is not available while performing screen refresh.
  *   This function is automatically called in gdey0154d67_draw_bitmap().
  * 
- * @param[in] epd Corresponding device handle.
+ * @param[in] epd GDEY0154D67 device handle.
  * @return esp_err_t Error code.
  */
 static esp_err_t esp_lcd_gdey0154d67_await_busy(esp_lcd_panel_handle_t epd);
@@ -137,7 +146,7 @@ static esp_err_t esp_lcd_gdey0154d67_await_busy(esp_lcd_panel_handle_t epd);
 /**
  * @brief Reset LCD display
  * 
- * @param[in] epd Corresponding display handle.
+ * @param[in] epd GDEY0154D67 device handle.
  * @return esp_err_t Error code.
  */
 static esp_err_t gdey0154d67_reset(esp_lcd_panel_t * epd);
@@ -145,7 +154,7 @@ static esp_err_t gdey0154d67_reset(esp_lcd_panel_t * epd);
 /**
  * @brief Initialize LCD panel.
  * 
- * @param[in] epd Corresponding display handle.
+ * @param[in] epd GDEY0154D67 device handle.
  * @return esp_err_t Error code.
  */
 static esp_err_t gdey0154d67_init(esp_lcd_panel_t * epd);
@@ -153,7 +162,7 @@ static esp_err_t gdey0154d67_init(esp_lcd_panel_t * epd);
 /**
  * @brief Deinitialize the LCD panel.
  * 
- * @param[in] epd Corresponding display handle.
+ * @param[in] epd GDEY0154D67 device handle.
  * @return esp_err_t Error code.
  */
 static esp_err_t gdey0154d67_del(esp_lcd_panel_t * epd);
@@ -161,7 +170,7 @@ static esp_err_t gdey0154d67_del(esp_lcd_panel_t * epd);
 /**
  * @brief Draw bitmap on the LCD panel.
  * 
- * @param[in] epd Corresponding display handle.
+ * @param[in] epd GDEY0154D67 device handle.
  * @param[in] x_start X-Axis start pixel index. The x_start is included.
  * @param[in] y_start Y-Axis start pixel index. The y_start is included.
  * @param[in] x_end X-Axis end pixel index. The x_end is NOT included.
@@ -176,7 +185,7 @@ static esp_err_t gdey0154d67_draw_bitmap(esp_lcd_panel_t *epd, int x_start, int 
  * @note Sends invert color command.
  *   The changes are applied on the next screen redraw (see gdey0154d67_draw_bitmap).
  * 
- * @param[in] epd Corresponding display handle.
+ * @param[in] epd GDEY0154D67 device handle.
  * @param[in] invert_color_data Whether to invert the color data
  * @return esp_err_t 
  */
@@ -200,7 +209,7 @@ static esp_err_t gdey0154d67_invert_color(esp_lcd_panel_t *epd, bool invert_colo
  *   parameter esp_lcd_gdey0154d67_vendor_config_t::retain_ram is false,
  *   the display RAM content becomes random after wake-up, requiring a full screen redraw.
  * 
- * @param[in] epd Corresponding display handle.
+ * @param[in] epd GDEY0154D67 device handle.
  * @param[in] sleep True ~ Enter the sleep mode; False ~ wake up.
  * @return esp_err_t Error code.
  */

@@ -124,19 +124,20 @@ void app_main(void) {
     ESP_ERROR_CHECK(esp_lcd_panel_init(eink));
     // Note: ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false)); would to the same
 
-    // Draw full screen image with basic info using fast update mode
+    // Draw basic info using fast update mode
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_fast_update));
     ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_basic));
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
     vTaskDelay(pdMS_TO_TICKS(2000));
 
-    // Draw full screen image with technical details using full update mode
+    // Draw technical details using full update mode
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false));
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_full_update));
     ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_specs));
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
     vTaskDelay(pdMS_TO_TICKS(2000));
 
+    // Draw some digits using fast update mode
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false));
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_whitescreen(eink));
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_set_update_mode(eink, esp_lcd_gdey0154d67_partial_update));
@@ -147,6 +148,7 @@ void app_main(void) {
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, true));
     vTaskDelay(pdMS_TO_TICKS(1000));
 
+    // Draw qr code containing link to project GitHub page (https://github.com/kk-kk-k/gdey0154D67)
     ESP_ERROR_CHECK(esp_lcd_panel_disp_sleep(eink, false));
     ESP_ERROR_CHECK(esp_lcd_gdey0154d67_whitescreen(eink));
     ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(eink, 0, 0, 200, 200, demo_image_qr_code_link_to_gh));

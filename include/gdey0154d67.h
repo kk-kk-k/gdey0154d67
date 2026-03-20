@@ -81,8 +81,9 @@ extern esp_err_t esp_lcd_gdey0154d67_set_update_mode(esp_lcd_panel_handle_t epd,
 
 /**
  * @brief Clear whole GDEY0154D67 screen.
- *  Recommended when the e-ink is not used for longer period of time.
- *  This function does not change the e-ink update type.
+ * @note Recommended when the e-ink is not used for longer period of time.
+ * @note This function does not change the e-ink update type -
+ *   it updates the screen using full update and then reverts back to the original update mode.
  * 
  * @param[in] epd GDEY0154D67 device handle.
  * @return esp_err_t Error code
